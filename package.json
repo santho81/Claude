@@ -1,0 +1,19 @@
+{
+  "name": "bbc-media-api-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cucumber TypeScript automation framework for the BBC media API",
+  "scripts": {
+    "test": "cucumber-js --config cucumber.cjs",
+    "build": "tsc --noEmit",
+    "clean": "rm -rf reports"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "11.2.0",
+    "@types/chai": "4.3.20",
+    "@types/node": "22.10.5",
+    "chai": "4.5.0",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.2"
+  }
+}

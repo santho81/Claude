@@ -1,0 +1,517 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "media-endpoint-availability-and-performance;media-endpoint-returns-200-within-the-response-time-threshold",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Media endpoint returns 200 within the response time threshold",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 646625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 4,
+            "name": "I send a GET request to the media endpoint",
+            "match": {
+              "location": "step-definitions/media.steps.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 436481832
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 5,
+            "name": "the response status code should be 200",
+            "match": {
+              "location": "step-definitions/media.steps.ts:53"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 763958
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 6,
+            "name": "the response time should be below 1000 milliseconds",
+            "match": {
+              "location": "step-definitions/media.steps.ts:60"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 368832
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "media-endpoint-availability-and-performance",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Media endpoint availability and performance",
+    "tags": [],
+    "uri": "features/media_status_and_performance.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "media-endpoint-data-integrity;every-track-has-a-valid-id",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Every track has a valid id",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 176624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 4,
+            "name": "I send a GET request to the media endpoint",
+            "match": {
+              "location": "step-definitions/media.steps.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 344795125
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "the data array should contain 14 items",
+            "match": {
+              "location": "step-definitions/media.steps.ts:67"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 876083
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the \"id\" field should not be null or empty for every item",
+            "match": {
+              "location": "step-definitions/media.steps.ts:74"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 306082
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "media-endpoint-data-integrity;exactly-one-track-is-now-playing",
+        "keyword": "Scenario",
+        "line": 10,
+        "name": "Exactly one track is now playing",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 140750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 4,
+            "name": "I send a GET request to the media endpoint",
+            "match": {
+              "location": "step-definitions/media.steps.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 115094208
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "exactly one item should have \"offset.now_playing\" set to true",
+            "match": {
+              "location": "step-definitions/media.steps.ts:87"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 248833
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "media-endpoint-data-integrity",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Media endpoint data integrity",
+    "tags": [],
+    "uri": "features/media_data_integrity.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "media-endpoint-response-headers;response-contains-a-valid-date-header",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Response contains a valid Date header",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 22167
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 4,
+            "name": "I send a GET request to the media endpoint",
+            "match": {
+              "location": "step-definitions/media.steps.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 115895084
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 5,
+            "name": "the response should include a \"Date\" header",
+            "match": {
+              "location": "step-definitions/media.steps.ts:100"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 331749
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 6,
+            "name": "the \"Date\" header should be a valid HTTP-date",
+            "match": {
+              "location": "step-definitions/media.steps.ts:107"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2227833
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "media-endpoint-response-headers",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Media endpoint response headers",
+    "tags": [],
+    "uri": "features/media_headers.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "manual-test-cases-for-the-media-endpoint;tc1---each-track-exposes-core-metadata",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "TC1 - Each track exposes core metadata",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 32957
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I request https://testapi.io/api/RMSTest/media",
+            "match": {
+              "location": "step-definitions/media.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 115227250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "I inspect each track in the \"data\" array",
+            "match": {
+              "location": "step-definitions/media.steps.ts:122"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 791333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "each track should expose a non-empty \"id\"",
+            "match": {
+              "location": "step-definitions/media.steps.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 493124
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "each track should expose a \"type\"",
+            "match": {
+              "location": "step-definitions/media.steps.ts:141"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 574540
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "each track should expose a \"title_list\" containing primary and, where applicable, secondary title details",
+            "match": {
+              "location": "step-definitions/media.steps.ts:152"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 580790
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "manual-test-cases-for-the-media-endpoint;tc2---only-one-track-is-marked-as-now-playing",
+        "keyword": "Scenario",
+        "line": 10,
+        "name": "TC2 - Only one track is marked as now playing",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 26166
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 11,
+            "name": "I request https://testapi.io/api/RMSTest/media",
+            "match": {
+              "location": "step-definitions/media.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 118312750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "I review the \"offset\" object of every track",
+            "match": {
+              "location": "step-definitions/media.steps.ts:175"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 940041
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "exactly one track should have \"now_playing\" set to true",
+            "match": {
+              "location": "step-definitions/media.steps.ts:193"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 598500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "all remaining tracks should have \"now_playing\" set to false",
+            "match": {
+              "location": "step-definitions/media.steps.ts:208"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 303667
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "the sole true result should be track \"p002d7bc\"",
+            "match": {
+              "location": "step-definitions/media.steps.ts:224"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 391167
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "manual-test-cases-for-the-media-endpoint;tc3---the-response-is-well-formed-and-complete",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "TC3 - The response is well formed and complete",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 29125
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 18,
+            "name": "I request https://testapi.io/api/RMSTest/media",
+            "match": {
+              "location": "step-definitions/media.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 120924833
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 19,
+            "name": "the response is returned",
+            "match": {
+              "location": "step-definitions/media.steps.ts:239"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 528416
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "the body should be valid JSON",
+            "match": {
+              "location": "step-definitions/media.steps.ts:243"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 457417
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "the \"data\" array should contain exactly 14 tracks",
+            "match": {
+              "location": "step-definitions/media.steps.ts:250"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 614292
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "the \"Content-Type\" header should indicate application/json",
+            "match": {
+              "location": "step-definitions/media.steps.ts:258"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 326125
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "manual-test-cases-for-the-media-endpoint",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Manual test cases for the media endpoint",
+    "tags": [],
+    "uri": "features/media_manual_test_cases.feature"
+  }
+]
