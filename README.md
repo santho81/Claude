@@ -29,6 +29,10 @@ npm run build
 
 HTML and JSON reports are written to `reports/cucumber-report.html` and `reports/cucumber-report.json`.
 
+## Continuous integration
+
+GitHub Actions runs the tests and TypeScript build on pushes, pull requests, and manual dispatches. Each run uses a GitHub-hosted Ubuntu runner and uploads the Cucumber HTML and JSON reports as the `cucumber-reports` artifact, retained for 7 days.
+
 ## Project structure
 
 - `features/`: Cucumber feature files, including three manual Gherkin cases
