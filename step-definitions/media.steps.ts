@@ -32,6 +32,14 @@ function nonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function nowPlayingValue(track: MediaTrack): unknown {
+  return isRecord(track.offset) ? track.offset.now_playing : undefined;
+}
+
 Before(function (this: CustomWorld) {
   this.apiResponse = undefined;
 });
@@ -61,39 +69,6 @@ Then(
   "the response time should be below 1000 milliseconds",
   function (this: CustomWorld) {
     expect(this.apiResponse?.durationMs).to.be.lessThan(1000);
-  }
-);
-
-Then(
-  "the data array should contain 14 items",
-  function (this: CustomWorld) {
-    expect(payload(this).data).to.have.lengthOf(14);
-  }
-);
-
-Then(
-  'the {string} field should not be null or empty for every item',
-  function (this: CustomWorld, fieldName: string) {
-    expect(fieldName).to.equal("id");
-
-    const invalidIds = payload(this).data
-      .map((track) => track.id)
-      .filter((id) => id === null || id === undefined || (typeof id === "string" && id.trim() === ""));
-
-    expect(invalidIds, "Track IDs must not be null or empty").to.have.lengthOf(0);
-  }
-);
-
-Then(
-  'exactly one item should have {string} set to true',
-  function (this: CustomWorld, fieldName: string) {
-    expect(fieldName).to.equal("offset.now_playing");
-
-    const nowPlayingCount = payload(this).data
-      .filter((track) => track.offset?.now_playing === true)
-      .length;
-
-    expect(nowPlayingCount).to.equal(1);
   }
 );
 
@@ -142,9 +117,7 @@ Then(
   'each track should expose a {string}',
   function (this: CustomWorld, fieldName: string) {
     expect(fieldName).to.equal("type");
-    const invalidTracks = payload(this).data.filter(
-      (track) => !nonEmptyString(track.type)
-    );
+    const invalidTracks = payload(this).data.filter((track) => !nonEmptyString(track.type));
     expect(invalidTracks, "Every track must have a non-empty type").to.have.lengthOf(0);
   }
 );
@@ -155,16 +128,10 @@ Then(
     expect(fieldName).to.equal("title_list");
     const invalidTracks = payload(this).data.filter((track) => {
       const titleList = track.title_list;
-      if (typeof titleList !== "object" || titleList === null || Array.isArray(titleList)) {
-        return true;
-      }
-
-      const titles = titleList as { primary?: unknown; secondary?: unknown };
+      if (!isRecord(titleList)) return true;
       return (
-        !nonEmptyString(titles.primary) ||
-        (titles.secondary !== null &&
-          titles.secondary !== undefined &&
-          !nonEmptyString(titles.secondary))
+        !nonEmptyString(titleList.primary) ||
+        (titleList.secondary != null && !nonEmptyString(titleList.secondary))
       );
     });
 
@@ -177,13 +144,7 @@ When(
   function (this: CustomWorld, fieldName: string) {
     expect(fieldName).to.equal("offset");
     const invalidTracks = payload(this).data.filter((track) => {
-      const offset = track.offset;
-      return (
-        typeof offset !== "object" ||
-        offset === null ||
-        Array.isArray(offset) ||
-        typeof (offset as { now_playing?: unknown }).now_playing !== "boolean"
-      );
+      return typeof nowPlayingValue(track) !== "boolean";
     });
     expect(invalidTracks, "Every track must have an offset with a boolean now_playing value")
       .to.have.lengthOf(0);
@@ -194,14 +155,7 @@ Then(
   'exactly one track should have {string} set to true',
   function (this: CustomWorld, fieldName: string) {
     expect(fieldName).to.equal("now_playing");
-    const count = payload(this).data.filter(
-      (track) =>
-        typeof track.offset === "object" &&
-        track.offset !== null &&
-        !Array.isArray(track.offset) &&
-        (track.offset as { now_playing?: unknown }).now_playing === true
-    ).length;
-    expect(count).to.equal(1);
+    expect(payload(this).data.filter((track) => nowPlayingValue(track) === true)).to.have.lengthOf(1);
   }
 );
 
@@ -210,13 +164,7 @@ Then(
   function (this: CustomWorld, fieldName: string) {
     expect(fieldName).to.equal("now_playing");
     const tracks = payload(this).data;
-    const falseCount = tracks.filter(
-      (track) =>
-        typeof track.offset === "object" &&
-        track.offset !== null &&
-        !Array.isArray(track.offset) &&
-        (track.offset as { now_playing?: unknown }).now_playing === false
-    ).length;
+    const falseCount = tracks.filter((track) => nowPlayingValue(track) === false).length;
     expect(falseCount).to.equal(tracks.length - 1);
   }
 );
@@ -224,13 +172,7 @@ Then(
 Then(
   'the sole true result should be track {string}',
   function (this: CustomWorld, expectedId: string) {
-    const nowPlayingTracks = payload(this).data.filter(
-      (track) =>
-        typeof track.offset === "object" &&
-        track.offset !== null &&
-        !Array.isArray(track.offset) &&
-        (track.offset as { now_playing?: unknown }).now_playing === true
-    );
+    const nowPlayingTracks = payload(this).data.filter((track) => nowPlayingValue(track) === true);
     expect(nowPlayingTracks).to.have.lengthOf(1);
     expect(nowPlayingTracks[0].id).to.equal(expectedId);
   }
@@ -247,13 +189,16 @@ Then("the body should be valid JSON", function (this: CustomWorld) {
   expect(payload(this).data).to.be.an("array");
 });
 
-Then(
-  'the {string} array should contain exactly 14 tracks',
-  function (this: CustomWorld, arrayName: string) {
-    expect(arrayName).to.equal("data");
-    expect(payload(this).data).to.have.lengthOf(14);
-  }
-);
+Then('the "data" array should contain exactly 14 tracks', function (this: CustomWorld) {
+  expect(payload(this).data).to.have.lengthOf(14);
+});
+
+Then('the "id" field should not be null or empty for every item', function (this: CustomWorld) {
+  const invalidIds = payload(this).data.filter(
+    ({ id }) => id === null || id === undefined || (typeof id === "string" && id.trim() === "")
+  );
+  expect(invalidIds, "Track IDs must not be null or empty").to.have.lengthOf(0);
+});
 
 Then(
   /^the "([^"]+)" header should indicate application\/json$/,
