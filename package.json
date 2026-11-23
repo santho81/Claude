@@ -5,8 +5,10 @@
   "description": "Cucumber TypeScript automation framework for the media API",
   "scripts": {
     "test": "cucumber-js --config cucumber.cjs",
+    "test:live": "cucumber-js --config cucumber.cjs --profile live",
     "build": "tsc --noEmit",
-    "clean": "rm -rf reports"
+    "summary": "node scripts/summary.cjs",
+    "clean": "node -e \"require('fs').rmSync('reports',{recursive:true,force:true})\""
   },
   "devDependencies": {
     "@cucumber/cucumber": "11.2.0",

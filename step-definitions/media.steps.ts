@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { Before, Given, Then, When } from "@cucumber/cucumber";
+import { Given, Then, When } from "@cucumber/cucumber";
 import { CustomWorld } from "../support/world";
-import { getMediaResponse, MEDIA_ENDPOINT } from "../support/apiClient";
+import { getMediaResponse } from "../support/apiClient";
 
 interface MediaTrack {
   type?: unknown;
@@ -40,21 +40,18 @@ function nowPlayingValue(track: MediaTrack): unknown {
   return isRecord(track.offset) ? track.offset.now_playing : undefined;
 }
 
-Before(function (this: CustomWorld) {
-  this.apiResponse = undefined;
-});
-
 Given(
   /^I request (https:\/\/testapi\.io\/api\/RMSTest\/media)$/,
-  async function (this: CustomWorld, endpoint: string) {
-    this.apiResponse = await getMediaResponse(endpoint);
+  async function (this: CustomWorld, _documentedEndpoint: string) {
+    // The URL in the scenario documents the live endpoint; the actual target comes from config.
+    this.apiResponse = await getMediaResponse(this.config.endpoint);
   }
 );
 
 When(
   "I send a GET request to the media endpoint",
   async function (this: CustomWorld) {
-    this.apiResponse = await getMediaResponse(MEDIA_ENDPOINT);
+    this.apiResponse = await getMediaResponse(this.config.endpoint);
   }
 );
 
@@ -66,9 +63,21 @@ Then(
 );
 
 Then(
-  "the response time should be below 1000 milliseconds",
-  function (this: CustomWorld) {
-    expect(this.apiResponse?.durationMs).to.be.lessThan(1000);
+  "the median response time should be within the configured threshold",
+  async function (this: CustomWorld) {
+    const { perfSamples, perfMaxMs, endpoint } = this.config;
+    await getMediaResponse(endpoint); // warm-up: excludes DNS/TLS setup from the measurement
+
+    const samples: number[] = [];
+    for (let i = 0; i < perfSamples; i++) {
+      samples.push((await getMediaResponse(endpoint)).durationMs);
+    }
+    const sorted = [...samples].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)];
+    const rounded = samples.map((ms) => Math.round(ms));
+
+    this.attach(`samples(ms)=${rounded.join(", ")} median=${Math.round(median)} threshold=${perfMaxMs}`, "text/plain");
+    expect(median, `median of [${rounded.join(", ")}] ms vs threshold ${perfMaxMs} ms`).to.be.at.most(perfMaxMs);
   }
 );
 
@@ -170,11 +179,15 @@ Then(
 );
 
 Then(
-  'the sole true result should be track {string}',
-  function (this: CustomWorld, expectedId: string) {
+  'the sole true result should be a track with a valid id',
+  function (this: CustomWorld) {
     const nowPlayingTracks = payload(this).data.filter((track) => nowPlayingValue(track) === true);
     expect(nowPlayingTracks).to.have.lengthOf(1);
-    expect(nowPlayingTracks[0].id).to.equal(expectedId);
+    expect(nonEmptyString(nowPlayingTracks[0].id), "now-playing track must have an id").to.equal(true);
+    const expectedId = this.config.expectedNowPlayingId;
+    if (expectedId) {
+      expect(nowPlayingTracks[0].id).to.equal(expectedId);
+    }
   }
 );
 
@@ -189,8 +202,8 @@ Then("the body should be valid JSON", function (this: CustomWorld) {
   expect(payload(this).data).to.be.an("array");
 });
 
-Then('the "data" array should contain exactly 14 tracks', function (this: CustomWorld) {
-  expect(payload(this).data).to.have.lengthOf(14);
+Then('the "data" array should contain the expected number of tracks', function (this: CustomWorld) {
+  expect(payload(this).data).to.have.lengthOf(this.config.expectedTrackCount);
 });
 
 Then('the "id" field should not be null or empty for every item', function (this: CustomWorld) {

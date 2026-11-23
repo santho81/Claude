@@ -1,4 +1,4 @@
-export const MEDIA_ENDPOINT = "https://testapi.io/api/RMSTest/media";
+import { LIVE_ENDPOINT } from "./config";
 
 export interface ApiResponse {
   status: number;
@@ -8,7 +8,7 @@ export interface ApiResponse {
 }
 
 export async function getMediaResponse(
-  endpoint: string = MEDIA_ENDPOINT
+  endpoint: string = LIVE_ENDPOINT
 ): Promise<ApiResponse> {
   const startedAt = performance.now();
 

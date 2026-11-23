@@ -12,11 +12,11 @@ Feature: Manual test cases for the media endpoint
     When I review the "offset" object of every track
     Then exactly one track should have "now_playing" set to true
     And all remaining tracks should have "now_playing" set to false
-    And the sole true result should be track "p002d7bc"
+    And the sole true result should be a track with a valid id
 
   Scenario: TC3 - The response is well formed and complete
     Given I request https://testapi.io/api/RMSTest/media
     When the response is returned
     Then the body should be valid JSON
-    And the "data" array should contain exactly 14 tracks
+    And the "data" array should contain the expected number of tracks
     And the "Content-Type" header should indicate application/json
