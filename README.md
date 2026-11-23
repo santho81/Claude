@@ -2,7 +2,7 @@
 
 ## Project
 
-This repository contains Cucumber/TypeScript automated tests and three Gherkin manual test cases for `https://testapi.io/api/RMSTest/media`.
+This repository contains Cucumber/TypeScript automated tests and three additional functional Gherkin scenarios for `https://testapi.io/api/RMSTest/media`. All scenarios are included in the Cucumber run.
 
 ## Automated coverage
 
@@ -22,7 +22,7 @@ This repository contains Cucumber/TypeScript automated tests and three Gherkin m
 ## Install and run
 
 ```bash
-npm install
+npm ci
 npm test
 npm run build
 ```
@@ -35,7 +35,7 @@ GitHub Actions runs the tests and TypeScript build on pushes, pull requests, and
 
 ## Project structure
 
-- `features/`: Cucumber feature files, including three manual Gherkin cases
+- `features/`: Cucumber feature files, including three additional functional scenarios
 - `step-definitions/`: Cucumber step implementations
 - `support/apiClient.ts`: HTTP client and response timing
 - `support/world.ts`: Scenario state
@@ -49,5 +49,5 @@ GitHub Actions runs the tests and TypeScript build on pushes, pull requests, and
 - `offset.now_playing` identifies the active track.
 - Response time is measured from request start to response receipt using `performance.now()` and can vary with network conditions.
 - The `Date` header is validated as an IMF-fixdate in GMT rather than against an exact server timestamp.
-- Manual test TC2 records the currently live now-playing track (`p002d7bc`) but is useful for checking the live data; a data fixture or contract change may require updating this expectation.
+- Functional scenario TC2 records the currently live now-playing track (`p002d7bc`); a data fixture or contract change may require updating this expectation.
 # Claude
