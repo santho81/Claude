@@ -1,4 +1,4 @@
-# BBC Media API Automation Framework
+# Media API Automation Framework
 
 ## Project
 

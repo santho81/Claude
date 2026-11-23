@@ -1,9 +1,9 @@
-# BBC Senior Tester Take Home Test
+# Media Senior Tester Take Home Test
 
 **Team:** ACS
 **Endpoint under test:** `https://testapi.io/api/RMSTest/media`
 **Submission:** Return to the HR representative **5 working days** after receiving the test.
-**Clarifications:** tejal.naik@bbc.co.uk
+**Clarifications:** tejal.naik@media.co.uk
 
 ---
 
